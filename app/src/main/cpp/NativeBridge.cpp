@@ -3,6 +3,7 @@
 #include "NativeBridge.h"
 #include "PhysicsWorld.h"
 #include "BodyFactory.h"
+#include "Extras.h"
 #include <box2d/box2d.h>
 
 extern "C" JNIEXPORT void JNICALL
@@ -11,7 +12,6 @@ Java_com_aviadkorakin_demonstrate_12d_1physics_Box2DEngineNativeBridge_initWorld
 {
     PhysicsWorld::instance().init(gx, gy);
     PhysicsWorld::instance().addGround(0.0f, 200.0f, 0.0f, 0.5f);
-
 }
 
 extern "C" JNIEXPORT void JNICALL
@@ -26,8 +26,7 @@ Java_com_aviadkorakin_demonstrate_12d_1physics_Box2DEngineNativeBridge_getBodyX(
         JNIEnv*, jobject, jint idx)
 {
     b2BodyId id = BodyFactory::getBodyId(idx);
-    if (B2_IS_NULL(id)) return 0.0f;
-    return b2Body_GetPosition(id).x;
+    return B2_IS_NULL(id) ? 0.0f : b2Body_GetPosition(id).x;
 }
 
 extern "C" JNIEXPORT jfloat JNICALL
@@ -35,8 +34,7 @@ Java_com_aviadkorakin_demonstrate_12d_1physics_Box2DEngineNativeBridge_getBodyY(
         JNIEnv*, jobject, jint idx)
 {
     b2BodyId id = BodyFactory::getBodyId(idx);
-    if (B2_IS_NULL(id)) return 0.0f;
-    return b2Body_GetPosition(id).y;
+    return B2_IS_NULL(id) ? 0.0f : b2Body_GetPosition(id).y;
 }
 
 extern "C" JNIEXPORT jfloat JNICALL
@@ -45,8 +43,7 @@ Java_com_aviadkorakin_demonstrate_12d_1physics_Box2DEngineNativeBridge_getBodyAn
 {
     b2BodyId id = BodyFactory::getBodyId(idx);
     if (B2_IS_NULL(id)) return 0.0f;
-    b2Rot rot = b2Body_GetRotation(id);
-    return b2Rot_GetAngle(rot);
+    return b2Rot_GetAngle(b2Body_GetRotation(id));
 }
 
 extern "C" JNIEXPORT jfloat JNICALL
@@ -54,8 +51,7 @@ Java_com_aviadkorakin_demonstrate_12d_1physics_Box2DEngineNativeBridge_getBodyVe
         JNIEnv*, jobject, jint idx)
 {
     b2BodyId id = BodyFactory::getBodyId(idx);
-    if (B2_IS_NULL(id)) return 0.0f;
-    return b2Body_GetLinearVelocity(id).x;
+    return B2_IS_NULL(id) ? 0.0f : b2Body_GetLinearVelocity(id).x;
 }
 
 extern "C" JNIEXPORT jfloat JNICALL
@@ -63,26 +59,10 @@ Java_com_aviadkorakin_demonstrate_12d_1physics_Box2DEngineNativeBridge_getBodyVe
         JNIEnv*, jobject, jint idx)
 {
     b2BodyId id = BodyFactory::getBodyId(idx);
-    if (B2_IS_NULL(id)) return 0.0f;
-    return b2Body_GetLinearVelocity(id).y;
+    return B2_IS_NULL(id) ? 0.0f : b2Body_GetLinearVelocity(id).y;
 }
 
-extern "C" JNIEXPORT jint JNICALL
-Java_com_aviadkorakin_demonstrate_12d_1physics_Box2DEngineNativeBridge_createCircle(
-        JNIEnv*, jobject, jfloat x, jfloat y, jfloat r,
-        jfloat d, jfloat f, jfloat re)
-{
-    return BodyFactory::createCircle(x, y, r, d, f, re);
-}
-
-extern "C" JNIEXPORT jint JNICALL
-Java_com_aviadkorakin_demonstrate_12d_1physics_Box2DEngineNativeBridge_createBox(
-        JNIEnv*, jobject, jfloat x, jfloat y, jfloat w, jfloat h,
-        jfloat d, jfloat f, jfloat re)
-{
-    return BodyFactory::createBox(x, y, w, h, d, f, re);
-}
-
+// BodyFactory controls
 extern "C" JNIEXPORT void JNICALL
 Java_com_aviadkorakin_demonstrate_12d_1physics_Box2DEngineNativeBridge_destroyBody(
         JNIEnv*, jobject, jint idx)
@@ -118,6 +98,7 @@ Java_com_aviadkorakin_demonstrate_12d_1physics_Box2DEngineNativeBridge_setAccele
     BodyFactory::setAcceleration(idx, ax, ay);
 }
 
+// World boundary builders
 extern "C" JNIEXPORT void JNICALL
 Java_com_aviadkorakin_demonstrate_12d_1physics_Box2DEngineNativeBridge_addGround(
         JNIEnv*, jobject, jfloat y, jfloat length, jfloat re, jfloat f)
@@ -146,17 +127,140 @@ Java_com_aviadkorakin_demonstrate_12d_1physics_Box2DEngineNativeBridge_addRightW
     PhysicsWorld::instance().addRightWall(x, h, re, f);
 }
 
+// World teardown & gravity
 extern "C" JNIEXPORT void JNICALL
 Java_com_aviadkorakin_demonstrate_12d_1physics_Box2DEngineNativeBridge_destroyWorld(
         JNIEnv*, jobject)
 {
-    // Tear down Box2D world and clear all bodies
-    PhysicsWorld::instance().destroy();     // you’ll add this
+    PhysicsWorld::instance().destroy();
     BodyFactory::clearBodies();
 }
+
 extern "C" JNIEXPORT void JNICALL
 Java_com_aviadkorakin_demonstrate_12d_1physics_Box2DEngineNativeBridge_setGravity(
         JNIEnv*, jobject, jfloat gx, jfloat gy)
 {
     b2World_SetGravity(PhysicsWorld::instance().getWorldId(), { gx, gy });
+}
+
+// Extras dynamic/static creation
+extern "C" JNIEXPORT jint JNICALL
+Java_com_aviadkorakin_demonstrate_12d_1physics_Box2DEngineNativeBridge_createDynamicSource(
+        JNIEnv*, jobject, jint shapeType,
+        jfloat x, jfloat y,
+        jfloat a, jfloat b,
+        jfloat density, jfloat friction, jfloat restitution)
+{
+    return Extras_CreateDynamicSource(
+            static_cast<ShapeType>(shapeType),
+            x, y, a, b,
+            density, friction, restitution);
+}
+
+extern "C" JNIEXPORT jint JNICALL
+Java_com_aviadkorakin_demonstrate_12d_1physics_Box2DEngineNativeBridge_createStaticSource(
+        JNIEnv*, jobject, jint shapeType,
+        jfloat x, jfloat y,
+        jfloat a, jfloat b,
+        jfloat density, jfloat friction, jfloat restitution)
+{
+    return Extras_CreateStaticSource(
+            static_cast<ShapeType>(shapeType),
+            x, y, a, b,
+            density, friction, restitution);
+}
+
+extern "C" JNIEXPORT jint JNICALL
+Java_com_aviadkorakin_demonstrate_12d_1physics_Box2DEngineNativeBridge_createDynamicTarget(
+        JNIEnv*, jobject, jint shapeType,
+        jfloat x, jfloat y,
+        jfloat a, jfloat b,
+        jfloat density, jfloat friction, jfloat restitution)
+{
+    return Extras_CreateDynamicTarget(
+            static_cast<ShapeType>(shapeType),
+            x, y, a, b,
+            density, friction, restitution);
+}
+
+extern "C" JNIEXPORT jint JNICALL
+Java_com_aviadkorakin_demonstrate_12d_1physics_Box2DEngineNativeBridge_createStaticTarget(
+        JNIEnv*, jobject, jint shapeType,
+        jfloat x, jfloat y,
+        jfloat a, jfloat b,
+        jfloat density, jfloat friction, jfloat restitution)
+{
+    return Extras_CreateStaticTarget(
+            static_cast<ShapeType>(shapeType),
+            x, y, a, b,
+            density, friction, restitution);
+}
+
+extern "C" JNIEXPORT jint JNICALL
+Java_com_aviadkorakin_demonstrate_12d_1physics_Box2DEngineNativeBridge_createDynamicObstacle(
+        JNIEnv*, jobject, jint shapeType,
+        jfloat x, jfloat y,
+        jfloat a, jfloat b,
+        jfloat density, jfloat friction, jfloat restitution)
+{
+    return Extras_CreateDynamicObstacle(
+            static_cast<ShapeType>(shapeType),
+            x, y, a, b,
+            density, friction, restitution);
+}
+
+extern "C" JNIEXPORT jint JNICALL
+Java_com_aviadkorakin_demonstrate_12d_1physics_Box2DEngineNativeBridge_createStaticObstacle(
+        JNIEnv*, jobject, jint shapeType,
+        jfloat x, jfloat y,
+        jfloat a, jfloat b,
+        jfloat density, jfloat friction, jfloat restitution)
+{
+    return Extras_CreateStaticObstacle(
+            static_cast<ShapeType>(shapeType),
+            x, y, a, b,
+            density, friction, restitution);
+}
+
+// Collision processing & queries
+extern "C" JNIEXPORT void JNICALL
+Java_com_aviadkorakin_demonstrate_12d_1physics_Box2DEngineNativeBridge_processCollisions(
+        JNIEnv*, jobject)
+{
+    Extras_ProcessCollisions();
+}
+
+extern "C" JNIEXPORT jboolean JNICALL
+Java_com_aviadkorakin_demonstrate_12d_1physics_Box2DEngineNativeBridge_isBodyAlive(
+        JNIEnv*, jobject, jint idx)
+{
+    return BodyFactory::isBodyAlive(idx) ? JNI_TRUE : JNI_FALSE;
+}
+
+extern "C" JNIEXPORT jfloat JNICALL
+Java_com_aviadkorakin_demonstrate_12d_1physics_Box2DEngineNativeBridge_getLeftX(
+        JNIEnv*, jobject)
+{
+    return PhysicsWorld::instance().getLeftX();
+}
+
+extern "C" JNIEXPORT jfloat JNICALL
+Java_com_aviadkorakin_demonstrate_12d_1physics_Box2DEngineNativeBridge_getRightX(
+        JNIEnv*, jobject)
+{
+    return PhysicsWorld::instance().getRightX();
+}
+
+extern "C" JNIEXPORT jfloat JNICALL
+Java_com_aviadkorakin_demonstrate_12d_1physics_Box2DEngineNativeBridge_getGroundY(
+        JNIEnv*, jobject)
+{
+    return PhysicsWorld::instance().getGroundY();
+}
+
+extern "C" JNIEXPORT jfloat JNICALL
+Java_com_aviadkorakin_demonstrate_12d_1physics_Box2DEngineNativeBridge_getRoofY(
+        JNIEnv*, jobject)
+{
+    return PhysicsWorld::instance().getRoof();
 }

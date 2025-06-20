@@ -15,6 +15,7 @@ add_library(${CMAKE_PROJECT_NAME}
         NativeBridge.cpp
         PhysicsWorld.cpp
         BodyFactory.cpp
+        Extras.cpp
 
 )
 
