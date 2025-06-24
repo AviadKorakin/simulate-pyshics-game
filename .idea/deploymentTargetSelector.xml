@@ -4,7 +4,7 @@
     <selectionStates>
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2025-06-17T18:25:05.811397Z">
+        <DropdownSelection timestamp="2025-06-22T15:56:46.612341Z">
           <Target type="DEFAULT_BOOT">
             <handle>
               <DeviceId pluginId="LocalEmulator" identifier="path=/Users/aviad/.android/avd/Galaxy_s5.avd" />

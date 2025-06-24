@@ -92,13 +92,13 @@ Java_com_aviadkorakin_demonstrate_12d_1physics_Box2DEngineNativeBridge_createDyn
         JNIEnv*, jobject, jint shapeType,
         jfloat x, jfloat y,
         jfloat a, jfloat b,
-        jfloat density, jfloat friction, jfloat restitution);
+        jfloat density, jfloat friction, jfloat restitution,jint scoreValue);
 JNIEXPORT jint JNICALL
 Java_com_aviadkorakin_demonstrate_12d_1physics_Box2DEngineNativeBridge_createStaticTarget(
         JNIEnv*, jobject, jint shapeType,
         jfloat x, jfloat y,
         jfloat a, jfloat b,
-        jfloat density, jfloat friction, jfloat restitution);
+        jfloat density, jfloat friction, jfloat restitution,jint scoreValue);
 
 JNIEXPORT jint JNICALL
 Java_com_aviadkorakin_demonstrate_12d_1physics_Box2DEngineNativeBridge_createDynamicObstacle(
@@ -133,6 +133,41 @@ Java_com_aviadkorakin_demonstrate_12d_1physics_Box2DEngineNativeBridge_getGround
         JNIEnv*, jobject);
 JNIEXPORT jfloat JNICALL
 Java_com_aviadkorakin_demonstrate_12d_1physics_Box2DEngineNativeBridge_getRoofY(
+        JNIEnv*, jobject);
+JNIEXPORT jfloatArray JNICALL
+Java_com_aviadkorakin_demonstrate_12d_1physics_Box2DEngineNativeBridge_getAllBodyPositions(
+        JNIEnv* env, jobject );
+JNIEXPORT jint JNICALL
+Java_com_aviadkorakin_demonstrate_12d_1physics_Box2DEngineNativeBridge_getScore(JNIEnv *env,
+                                                                                jobject );
+JNIEXPORT void JNICALL
+Java_com_aviadkorakin_demonstrate_12d_1physics_Box2DEngineNativeBridge_resetScore(JNIEnv *env,
+                                                                                  jobject );
+JNIEXPORT void JNICALL
+Java_com_aviadkorakin_demonstrate_12d_1physics_Box2DEngineNativeBridge_stepWorldPlusCollisions( JNIEnv*, jobject, jfloat d);
+
+JNIEXPORT jintArray JNICALL
+Java_com_aviadkorakin_demonstrate_12d_1physics_Box2DEngineNativeBridge_stepAndGetRemoved(
+        JNIEnv* env, jobject, jfloat dt);
+JNIEXPORT jfloatArray JNICALL
+Java_com_aviadkorakin_demonstrate_12d_1physics_Box2DEngineNativeBridge_getBodyPosition(
+        JNIEnv* env, jobject /* self */, jint idx);
+JNIEXPORT void JNICALL
+Java_com_aviadkorakin_demonstrate_12d_1physics_Box2DEngineNativeBridge_teleportAndStop(
+        JNIEnv* env, jobject /* this */,
+jint idx, jfloat x, jfloat y);
+
+JNIEXPORT void JNICALL
+Java_com_aviadkorakin_demonstrate_12d_1physics_Box2DEngineNativeBridge_setGravityScale(
+        JNIEnv* /*env*/, jobject /*self*/,
+        jint idx, jfloat scale);
+
+JNIEXPORT jboolean JNICALL
+Java_com_aviadkorakin_demonstrate_12d_1physics_Box2DEngineNativeBridge_extrasHadContact(
+        JNIEnv*, jobject, jint idx);
+
+JNIEXPORT void JNICALL
+Java_com_aviadkorakin_demonstrate_12d_1physics_Box2DEngineNativeBridge_extrasClearContacts(
         JNIEnv*, jobject);
 
 #ifdef __cplusplus

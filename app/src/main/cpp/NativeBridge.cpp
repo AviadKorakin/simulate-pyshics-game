@@ -175,12 +175,12 @@ Java_com_aviadkorakin_demonstrate_12d_1physics_Box2DEngineNativeBridge_createDyn
         JNIEnv*, jobject, jint shapeType,
         jfloat x, jfloat y,
         jfloat a, jfloat b,
-        jfloat density, jfloat friction, jfloat restitution)
+        jfloat density, jfloat friction, jfloat restitution,jint scoreValue)
 {
     return Extras_CreateDynamicTarget(
             static_cast<ShapeType>(shapeType),
             x, y, a, b,
-            density, friction, restitution);
+            density, friction, restitution,scoreValue);
 }
 
 extern "C" JNIEXPORT jint JNICALL
@@ -188,12 +188,12 @@ Java_com_aviadkorakin_demonstrate_12d_1physics_Box2DEngineNativeBridge_createSta
         JNIEnv*, jobject, jint shapeType,
         jfloat x, jfloat y,
         jfloat a, jfloat b,
-        jfloat density, jfloat friction, jfloat restitution)
+        jfloat density, jfloat friction, jfloat restitution,jint scoreValue)
 {
     return Extras_CreateStaticTarget(
             static_cast<ShapeType>(shapeType),
             x, y, a, b,
-            density, friction, restitution);
+            density, friction, restitution,scoreValue);
 }
 
 extern "C" JNIEXPORT jint JNICALL
@@ -263,4 +263,88 @@ Java_com_aviadkorakin_demonstrate_12d_1physics_Box2DEngineNativeBridge_getRoofY(
         JNIEnv*, jobject)
 {
     return PhysicsWorld::instance().getRoof();
+}
+
+extern "C" JNIEXPORT jfloatArray JNICALL
+Java_com_aviadkorakin_demonstrate_12d_1physics_Box2DEngineNativeBridge_getAllBodyPositions(
+        JNIEnv* env, jobject)
+{
+    auto vec = BodyFactory::getAllBodyPositions();
+    jfloatArray arr = env->NewFloatArray(static_cast<jsize>(vec.size()));
+    env->SetFloatArrayRegion(arr, 0, static_cast<jsize>(vec.size()), vec.data());
+    return arr;
+}
+
+extern "C" JNIEXPORT jint JNICALL
+Java_com_aviadkorakin_demonstrate_12d_1physics_Box2DEngineNativeBridge_getScore(JNIEnv *env,
+                                                                                jobject )
+                                                                                {
+    return Extras_GetScore();
+}
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_aviadkorakin_demonstrate_12d_1physics_Box2DEngineNativeBridge_resetScore(JNIEnv *env,
+                                                                                  jobject ) {
+    Extras_ResetScore();
+}
+extern "C" JNIEXPORT void JNICALL
+Java_com_aviadkorakin_demonstrate_12d_1physics_Box2DEngineNativeBridge_stepWorldPlusCollisions(
+        JNIEnv*, jobject, jfloat dt)
+{
+    PhysicsWorld::instance().stepPlusCollisons(dt);
+}
+extern "C" JNIEXPORT jintArray JNICALL
+Java_com_aviadkorakin_demonstrate_12d_1physics_Box2DEngineNativeBridge_stepAndGetRemoved(
+        JNIEnv* env, jobject, jfloat dt)
+{
+    // 1) step + process collisions
+    PhysicsWorld::instance().stepPlusCollisons(dt);
+    // 2) fetch the list we built
+    const auto& removed = Extras_GetLastDestroyed();
+    jintArray out = env->NewIntArray((jsize)removed.size());
+    env->SetIntArrayRegion(out, 0, (jsize)removed.size(), removed.data());
+    return out;
+}
+
+extern "C" JNIEXPORT jfloatArray JNICALL
+Java_com_aviadkorakin_demonstrate_12d_1physics_Box2DEngineNativeBridge_getBodyPosition(
+        JNIEnv* env, jobject /* self */, jint idx) {
+    b2BodyId id = BodyFactory::getBodyId(idx);
+    b2Vec2 pos = B2_IS_NULL(id)
+                 ? b2Vec2{0,0}
+                 : b2Body_GetPosition(id);
+    jfloat arr[2] = { pos.x, pos.y };
+    jfloatArray out = env->NewFloatArray(2);
+    env->SetFloatArrayRegion(out, 0, 2, arr);  // Create and fill array  [oai_citation:0‡stackoverflow.com](https://stackoverflow.com/questions/25011597/convert-float-to-jfloatarray-using-jni/25012075?utm_source=chatgpt.com)
+    return out;
+}
+extern "C" JNIEXPORT void JNICALL
+Java_com_aviadkorakin_demonstrate_12d_1physics_Box2DEngineNativeBridge_teleportAndStop(
+        JNIEnv* env, jobject /* this */,
+        jint idx, jfloat x, jfloat y) {
+    // First, zero velocity
+    BodyFactory::setVelocity(idx, 0.0f, 0.0f);
+    // Then, teleport body
+    BodyFactory::replaceBody(idx, x, y);
+}
+extern "C" JNIEXPORT void JNICALL
+Java_com_aviadkorakin_demonstrate_12d_1physics_Box2DEngineNativeBridge_setGravityScale(
+        JNIEnv* /*env*/, jobject /*self*/,
+        jint idx, jfloat scale)
+{
+    // Calls your BodyFactory helper
+    BodyFactory::setGravityScale(idx, scale);
+}
+extern "C" JNIEXPORT jboolean JNICALL
+Java_com_aviadkorakin_demonstrate_12d_1physics_Box2DEngineNativeBridge_extrasHadContact(
+        JNIEnv*, jobject, jint idx)
+{
+    return Extras_HadContact(idx) ? JNI_TRUE : JNI_FALSE;
+}
+
+extern "C" JNIEXPORT void JNICALL
+Java_com_aviadkorakin_demonstrate_12d_1physics_Box2DEngineNativeBridge_extrasClearContacts(
+        JNIEnv*, jobject)
+{
+    Extras_ClearContacts();
 }

@@ -1,0 +1,34 @@
+{
+  "levelName": "Level 4: Double-Tier Shelf",
+  "world": {
+    "gravity": { "gx": 0, "gy": -9.8 }
+  },
+  "bitmaps": {
+    "target":      ["ic_target","ic_target2","ic_target3","ic_target4"],
+    "obstacle":    ["ic_obstacle","ic_obstacle2","ic_obstacle3"],
+    "staticBlock": [],
+    "source":      ["ic_source"]
+  },
+  "objects": {
+    "pillars": [
+      { "x": -4.0, "y": 3, "halfW": 0.3, "halfH": 3, "color": "#556B2F" },
+      { "x":  4.0, "y": 3, "halfW": 0.3, "halfH": 3, "color": "#556B2F" }
+    ],
+    "shelves": [
+      { "x": 0, "y": 4,  "halfW": 3.5, "halfH": 0.2, "color": "#DEB887" },
+      { "x": 0, "y": 7,  "halfW": 2.0, "halfH": 0.2, "color": "#DEB887" }
+    ],
+    "staticBlocks": [],
+    "targets": [
+      { "x": -1.2, "y": 7.5, "radius": 0.5, "score": 2, "spriteIndex": 0 },
+      { "x":  0.0, "y": 7.5, "radius": 0.5, "score": 3, "spriteIndex": 1 },
+      { "x":  1.2, "y": 7.5, "radius": 0.5, "score": 2, "spriteIndex": 2 },
+      { "x":  0.0, "y": 4.5, "radius": 0.5, "score": 1, "spriteIndex": 3 }
+    ],
+    "obstacles": [
+      { "x": -2.0, "y": 5.5, "halfW": 0.3, "halfH": 0.3, "spriteIndex": 0 },
+      { "x":  2.0, "y": 5.5, "halfW": 0.3, "halfH": 0.3, "spriteIndex": 2 }
+    ],
+    "source": { "x": 0, "y": 1, "radius": 0.5 }
+  }
+}

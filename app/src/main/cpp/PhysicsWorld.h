@@ -14,6 +14,7 @@ public:
 
     /// Advance the simulation by dt seconds
     void step(float dt);
+    void stepPlusCollisons(float dt);
 
     /// Expose the underlying C-API world handle
     [[nodiscard]] b2WorldId getWorldId() const;

@@ -1,0 +1,33 @@
+{
+  "levelName": "Level 6: Criss-Cross Challenge",
+  "world": {
+    "gravity": { "gx": 0, "gy": -9.8 }
+  },
+  "bitmaps": {
+    "target":      ["ic_target","ic_target2","ic_target3"],
+    "obstacle":    ["ic_obstacle","ic_obstacle2","ic_obstacle3"],
+    "staticBlock": [],
+    "source":      ["ic_source"]
+  },
+  "objects": {
+    "pillars": [
+      { "x": -3,  "y": 2, "halfW": 0.3, "halfH": 2, "color": "#4B0082" },
+      { "x":  3,  "y": 2, "halfW": 0.3, "halfH": 2, "color": "#4B0082" }
+    ],
+    "shelves": [
+      { "x": 0, "y": 4, "halfW": 2.5, "halfH": 0.2, "color": "#8A2BE2" },
+      { "x": 0, "y": 6, "halfW": 2.5, "halfH": 0.2, "color": "#8A2BE2" }
+    ],
+    "staticBlocks": [],
+    "targets": [
+      { "x": -2, "y": 4.5, "radius": 0.4, "score": 1, "spriteIndex": 0 },
+      { "x":  2, "y": 4.5, "radius": 0.4, "score": 1, "spriteIndex": 1 },
+      { "x":  0, "y": 6.5, "radius": 0.4, "score": 2, "spriteIndex": 2 }
+    ],
+    "obstacles": [
+      { "x": -1, "y": 5, "halfW": 0.3, "halfH": 0.3, "spriteIndex": 1 },
+      { "x":  1, "y": 5, "halfW": 0.3, "halfH": 0.3, "spriteIndex": 2 }
+    ],
+    "source": { "x": 0, "y": 1, "radius": 0.5 }
+  }
+}

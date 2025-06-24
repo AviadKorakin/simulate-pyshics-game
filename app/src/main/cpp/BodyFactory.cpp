@@ -283,6 +283,8 @@ void BodyFactory::replaceBody(int idx, float x, float y) {
     if (B2_IS_NULL(body)) return;
     b2Rot rot = b2Body_GetRotation(body);
     b2Body_SetTransform(body, (b2Vec2){ x, y }, rot);
+    auto& world = PhysicsWorld::instance();
+    world.stepPlusCollisons(0);
 }
 
 // Toggles the restitution (bounciness) on all shapes of a body
@@ -364,7 +366,43 @@ bool BodyFactory::isBodyAlive(int idx) {
 
     return true;
 }
+ std::vector<float> BodyFactory::getAllBodyPositions() {
+    std::vector<float> out;
+    out.reserve(bodies_.size() * 3);
+    auto& world = PhysicsWorld::instance();
+    for (size_t idx = 0; idx < bodies_.size(); ++idx) {
+        b2BodyId body = bodies_[idx];
+        if (B2_IS_NULL(body)) continue;          // skip destroyed slots
+        b2Vec2 pos = b2Body_GetPosition(body);
+        out.push_back(static_cast<float>(idx)); // index in bodies_
+        out.push_back(pos.x);
+        out.push_back(pos.y);
+    }
+    return out;
+}
+
+void BodyFactory::setGravityScale(int idx, float scale) {
+    b2BodyId body = getBodyId(idx);
+    if (B2_IS_NULL(body)) return;               // invalid index → no-op
+    b2Body_SetGravityScale(body, scale);        // adjust per-body gravity  [oai_citation:0‡box2d.org](https://box2d.org/documentation/group__body.html?utm_source=chatgpt.com)
+}
 
 size_t BodyFactory::getBodyCount() {
     return bodies_.size();
+}
+
+int BodyFactory::lookupIndex(b2BodyId id) {
+    size_t count = BodyFactory::getBodyCount();
+    for (size_t ui = 0; ui < count; ++ui) {
+        if (B2_ID_EQUALS(BodyFactory::getBodyId(static_cast<int>(ui)), id)) {
+            return static_cast<int>(ui);
+        }
+    }
+    return -1;
+}
+
+void BodyFactory::setBullet(int idx, bool isBullet) {
+    b2BodyId body = getBodyId(idx);
+    if (B2_IS_NULL(body)) return;
+    b2Body_SetBullet(body, isBullet);
 }

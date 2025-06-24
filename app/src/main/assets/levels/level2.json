@@ -1,0 +1,46 @@
+{
+  "levelName": "Level 2: Obstacle Gauntlet (Adjusted)",
+  "world": {
+    "gravity": { "gx": 0, "gy": -9.8 }
+  },
+  "bitmaps": {
+    "target":      ["ic_target","ic_target2","ic_target3"],
+    "obstacle":    ["ic_obstacle","ic_obstacle2","ic_obstacle3"],
+    "staticBlock": ["ic_obstacle","ic_obstacle2","ic_obstacle3"],
+    "source":      ["ic_source"]
+  },
+  "objects": {
+    "pillars": [],
+    "shelves": [
+      {
+        "x": 0,
+        "y": 2.6,
+        "halfW": 1.5,
+        "halfH": 0.15,
+        "color": "#555555"
+      }
+    ],
+    "staticBlocks": [
+      {
+        "x": 0,
+        "y": 2,
+        "halfW": 1.5,
+        "halfH": 0.2,
+        "spriteIndex": 0
+      }
+    ],
+    "targets": [
+      { "x": -2, "y": 3.5, "radius": 0.5, "score": 1, "spriteIndex": 0 },
+      { "x":  0, "y": 3.5, "radius": 0.5, "score": 2, "spriteIndex": 1 },
+      { "x":  2, "y": 3.5, "radius": 0.5, "score": 3, "spriteIndex": 2 }
+    ],
+    "obstacles": [
+      { "x": -1,    "y": 2.5, "halfW": 0.3, "halfH": 0.3, "spriteIndex": 0 },
+      { "x":  1,    "y": 2.5, "halfW": 0.3, "halfH": 0.3, "spriteIndex": 1 },
+      { "x": 0,     "y": 4.0, "halfW": 0.4, "halfH": 0.2, "spriteIndex": 2 },
+      { "x": -0.5,  "y": 3.0, "halfW": 0.2, "halfH": 0.2, "spriteIndex": 1 },
+      { "x":  0.5,  "y": 3.0, "halfW": 0.2, "halfH": 0.2, "spriteIndex": 2 }
+    ],
+    "source": { "x": 0, "y": 1, "radius": 0.5 }
+  }
+}

@@ -4,11 +4,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- Custom SurfaceView that renders the physics simulation -->
-    <com.aviadkorakin.demonstrate_2d_physics.PhysicsView
-        android:id="@+id/physicsView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+    <Button
+        android:id="@+id/startButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Start Game"
+        android:layout_gravity="center"/>
 
 
 </FrameLayout>

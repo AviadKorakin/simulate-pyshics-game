@@ -1,0 +1,36 @@
+{
+  "levelName": "Level 5: High-Rise Shelf Gauntlet",
+  "world": {
+    "gravity": { "gx": 0, "gy": -9.8 }
+  },
+  "bitmaps": {
+    "target":      ["ic_target","ic_target2","ic_target3","ic_target4"],
+    "obstacle":    ["ic_obstacle","ic_obstacle2","ic_obstacle3"],
+    "staticBlock": [],
+    "source":      ["ic_source"]
+  },
+  "objects": {
+    "pillars": [
+      { "x": -3.0, "y": 3, "halfW": 0.3, "halfH": 3, "color": "#2F4F4F" },
+      { "x":  3.0, "y": 3, "halfW": 0.3, "halfH": 3, "color": "#2F4F4F" }
+    ],
+    "shelves": [
+      { "x": 0, "y": 5,  "halfW": 2.5, "halfH": 0.2, "color": "#DAA520" },
+      { "x": 0, "y": 8,  "halfW": 1.5, "halfH": 0.2, "color": "#DAA520" },
+      { "x": 0, "y": 11, "halfW": 0.8, "halfH": 0.2, "color": "#DAA520" }
+    ],
+    "staticBlocks": [],
+    "targets": [
+      { "x": -0.8,  "y": 8.5,  "radius": 0.5, "score": 3, "spriteIndex": 1 },
+      { "x":  0.8,  "y": 8.5,  "radius": 0.5, "score": 2, "spriteIndex": 2 },
+      { "x": -1.2,  "y": 5.5,  "radius": 0.5, "score": 1, "spriteIndex": 0 },
+      { "x":  1.2,  "y": 5.5,  "radius": 0.5, "score": 1, "spriteIndex": 1 }
+    ],
+    "obstacles": [
+      { "x": -1.5, "y": 6.5, "halfW": 0.3, "halfH": 0.3, "spriteIndex": 2 },
+      { "x":  1.5, "y": 6.5, "halfW": 0.3, "halfH": 0.3, "spriteIndex": 0 },
+      { "x":  0.0, "y": 9.5, "halfW": 0.4, "halfH": 0.4, "spriteIndex": 1 }
+    ],
+    "source": { "x": 0, "y": 1, "radius": 0.5 }
+  }
+}

@@ -47,14 +47,19 @@ public:
     static void setBouncing(int idx, bool enable);
     static void setVelocity(int idx, float vx, float vy);
     static void setAcceleration(int idx, float ax, float ay);
+    static void setGravityScale(int idx, float scale);
 
     /// New: directly set body location (teleport)
     static void setBodyLocation(int idx, float x, float y);
-
+    static int lookupIndex(b2BodyId id);
     /// New: apply impulse based on drag launch (px,py) -> (dx,dy), dt
     static void applyLaunchImpulse(int idx, float lastX, float lastY, float newX, float newY, float dt);
 
     static bool isBodyAlive(int idx);
+
+    static void setBullet(int idx, bool isBullet);
+
+    static std::vector<float> getAllBodyPositions();
 
 
     static std::vector<b2BodyId> bodies_;

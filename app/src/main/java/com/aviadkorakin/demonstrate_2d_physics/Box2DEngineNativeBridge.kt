@@ -11,6 +11,12 @@ object Box2DEngineNativeBridge {
 
     /** Simulation step */
     external fun stepWorld(dt: Float)
+    external fun stepWorldPlusCollisions(dt: Float)
+    external fun stepAndGetRemoved(dt:Float): IntArray
+    /** score hanlder */
+    external fun getScore(): Int
+    external fun resetScore()
+
 
     /** Body queries */
     external fun getBodyX(idx: Int): Float
@@ -19,6 +25,10 @@ object Box2DEngineNativeBridge {
     external fun getBodyVelX(idx: Int): Float
     external fun getBodyVelY(idx: Int): Float
     external fun isBodyAlive(idx: Int): Boolean
+    external fun getAllBodyPositions(): FloatArray
+    external fun getBodyPosition(idx: Int):FloatArray
+    external fun extrasHadContact(idx: Int): Boolean
+    external fun extrasClearContacts()
 
     /** Basic creation */
     external fun createCircle(
@@ -39,6 +49,8 @@ object Box2DEngineNativeBridge {
     external fun setVelocity(idx: Int, vx: Float, vy: Float)
     external fun setAcceleration(idx: Int, ax: Float, ay: Float)
     external fun setGravity(gx: Float, gy: Float)
+    external fun teleportAndStop(idx: Int,x: Float,y: Float)
+    external fun setGravityScale(idx: Int, scale: Float)
 
     /** World boundaries */
     external fun addGround(y: Float, length: Float, restitution: Float, friction: Float)
@@ -81,7 +93,8 @@ object Box2DEngineNativeBridge {
         a: Float, b: Float,
         density: Float,
         friction: Float,
-        restitution: Float
+        restitution: Float,
+        scoreValue:Int
     ): Int
 
     /**
@@ -93,7 +106,8 @@ object Box2DEngineNativeBridge {
         a: Float, b: Float,
         density: Float,
         friction: Float,
-        restitution: Float
+        restitution: Float,
+        scoreValue:Int
     ): Int
 
     /**
