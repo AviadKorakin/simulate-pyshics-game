@@ -181,9 +181,9 @@ external fun createBox(x: Float, y: Float, halfWidth: Float, halfHeight: Float, 
 
 ## 🎬 Demo Video
 
-> [![Demo Video Placeholder](https://img.icons8.com/ios-filled/100/000000/video.png)](https://your-demo-link.com)
+> [![Demo Video](https://img.youtube.com/vi/72Ub45hHkjw/0.jpg)](https://youtu.be/72Ub45hHkjw)
 >
-> _A video demonstration will be added here soon!_
+> _Watch a demonstration of the app in action!_
 
 ---
 
