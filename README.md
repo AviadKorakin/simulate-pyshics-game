@@ -22,9 +22,54 @@ A modern Android app demonstrating a seamless JNI bridge to a native C++ Box2D p
 ## 🏗️ Project Architecture
 
 ```mermaid
-%% Project architecture: Android, JNI, C++, JSON
+graph TD
+    A["GameActivity"] -->|"uses"| B["PhysicsView"]
+    B -->|"calls"| C["Box2DEngineNativeBridge"]
+    C -->|"JNI"| D["NativeBridge.cpp"]
+    D -->|"calls"| E["Box2D Engine"]
+    B -->|"loads"| F["Level JSON"]
+    F -->|"parsed by"| G["Level.kt"]
+    B -->|"renders"| H["Canvas"]
+    B -->|"handles"| I["User Input"]
+    C -->|"exposes"| J["Physics API"]
+    J -->|"step, create, destroy, query"| D
+    F -->|"editable"| K["assets/levels/*.json"]
+    subgraph Android App
+        A
+        B
+        C
+        F
+        G
+        H
+        I
+    end
+    subgraph Native
+        D
+        E
+    end
+    K
+    J
+```
+
 ---
-<diagram will be rendered here>
+
+## 🧭 User Interaction Flow
+
+```mermaid
+flowchart TD
+    A["User"] -->|"Touches/Drags"| B["PhysicsView"]
+    B -->|"Updates"| C["Box2DEngineNativeBridge"]
+    C -->|"JNI"| D["NativeBridge.cpp"]
+    D -->|"Simulates"| E["Box2D Physics"]
+    E -->|"Returns State"| D
+    D -->|"JNI"| C
+    C -->|"Updates"| B
+    B -->|"Renders"| F["Game Screen"]
+    B -->|"Loads"| G["Level JSON"]
+    G -->|"Editable"| H["assets/levels/*.json"]
+    G -->|"Parsed by"| I["Level.kt"]
+    B -->|"Win/Score"| J["GameActivity"]
+    J -->|"Shows"| K["Summary/Win Screen"]
 ```
 
 ---
@@ -32,16 +77,19 @@ A modern Android app demonstrating a seamless JNI bridge to a native C++ Box2D p
 ## 📦 Getting Started
 
 ### 1. Clone the Project
+
 ```bash
 git clone <your-repo-url>
 cd demonstrate_2d_physics
 ```
 
 ### 2. Open in Android Studio
+
 - Open the project root in Android Studio.
 - Let Gradle sync and index the project.
 
 ### 3. Build & Run
+
 - Connect an Android device or start an emulator.
 - Click **Run** ▶️ in Android Studio.
 
@@ -55,6 +103,7 @@ cd demonstrate_2d_physics
 - The bridge provides functions for world creation, stepping, body manipulation, collision handling, and more.
 
 **Example:**
+
 ```kotlin
 external fun createBox(x: Float, y: Float, halfWidth: Float, halfHeight: Float, density: Float, friction: Float, restitution: Float): Int
 ```
@@ -64,11 +113,13 @@ external fun createBox(x: Float, y: Float, halfWidth: Float, halfHeight: Float, 
 ## ⚙️ Native Build Setup (CMake & Gradle)
 
 - **CMake**: Native sources and Box2D are built via [`CMakeLists.txt`](app/src/main/cpp/CMakeLists.txt):
+
   - Adds Box2D as a subdirectory
   - Builds your native bridge and physics world
   - Links against Android log and native APIs
 
 - **Gradle**: The app's [`build.gradle.kts`](app/build.gradle.kts) configures `externalNativeBuild`:
+
   ```kotlin
   externalNativeBuild {
       cmake {
@@ -89,14 +140,19 @@ external fun createBox(x: Float, y: Float, halfWidth: Float, halfHeight: Float, 
 - **No code changes needed**—just add a new JSON file!
 
 **Example:**
+
 ```json
 {
   "levelName": "Level 1: Pillar Arc",
   "world": { "gravity": { "gx": 0, "gy": -9.8 } },
   "bitmaps": { "target": ["ic_target"], "source": ["ic_source"] },
   "objects": {
-    "pillars": [ { "x": -1.5, "y": 2, "halfW": 0.2, "halfH": 2, "color": "#555555" } ],
-    "targets": [ { "x": -3, "y": 4, "radius": 0.5, "score": 1, "spriteIndex": 0 } ],
+    "pillars": [
+      { "x": -1.5, "y": 2, "halfW": 0.2, "halfH": 2, "color": "#555555" }
+    ],
+    "targets": [
+      { "x": -3, "y": 4, "radius": 0.5, "score": 1, "spriteIndex": 0 }
+    ],
     "source": { "x": 0, "y": 1, "radius": 0.5 }
   }
 }
@@ -141,4 +197,4 @@ external fun createBox(x: Float, y: Float, halfWidth: Float, halfHeight: Float, 
 
 ## 📄 License
 
-- This project uses Box2D (MIT License) and is open for educational and demo purposes. 
+- This project uses Box2D (MIT License) and is open for educational and demo purposes.
